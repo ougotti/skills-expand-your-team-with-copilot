@@ -1,46 +1,124 @@
 """
-MongoDB database configuration and setup for Mergington High School API
+Simple in-memory database for development when MongoDB is not available
 """
 
-try:
-    from pymongo import MongoClient
-    from argon2 import PasswordHasher
+from typing import Dict, Any
 
-    # Connect to MongoDB
-    client = MongoClient('mongodb://localhost:27017/', serverSelectionTimeoutMS=2000)
-    # Test connection
-    client.admin.command('ping')
-    db = client['mergington_high']
-    activities_collection = db['activities']
-    teachers_collection = db['teachers']
-    print("Using MongoDB database")
-except Exception as e:
-    print(f"MongoDB not available, using simple in-memory database: {e}")
-    from backend.simple_database import activities_collection, teachers_collection
+# In-memory storage
+activities_data = {}
+teachers_data = {}
 
-# Methods
+class SimpleCollection:
+    def __init__(self, data_dict):
+        self.data = data_dict
+    
+    def find(self, query=None):
+        """Find documents matching query"""
+        if query is None:
+            query = {}
+        
+        results = []
+        for doc_id, doc in self.data.items():
+            doc_copy = doc.copy()
+            doc_copy['_id'] = doc_id
+            
+            # Simple query matching for day filter
+            if 'schedule_details.days' in query:
+                days_query = query['schedule_details.days']
+                if '$in' in days_query:
+                    required_days = days_query['$in']
+                    doc_days = doc.get('schedule_details', {}).get('days', [])
+                    if not any(day in doc_days for day in required_days):
+                        continue
+                        
+            # Simple query matching for time filters
+            if 'schedule_details.start_time' in query:
+                start_time_query = query['schedule_details.start_time']
+                if '$gte' in start_time_query:
+                    required_start = start_time_query['$gte']
+                    doc_start = doc.get('schedule_details', {}).get('start_time', '')
+                    if doc_start < required_start:
+                        continue
+                        
+            if 'schedule_details.end_time' in query:
+                end_time_query = query['schedule_details.end_time']
+                if '$lte' in end_time_query:
+                    required_end = end_time_query['$lte']
+                    doc_end = doc.get('schedule_details', {}).get('end_time', '')
+                    if doc_end > required_end:
+                        continue
+            
+            results.append(doc_copy)
+        
+        return results
+    
+    def find_one(self, query):
+        """Find one document"""
+        if isinstance(query, dict) and '_id' in query:
+            doc_id = query['_id']
+            if doc_id in self.data:
+                doc_copy = self.data[doc_id].copy()
+                doc_copy['_id'] = doc_id
+                return doc_copy
+        return None
+    
+    def update_one(self, query, update):
+        """Update one document"""
+        if '_id' in query:
+            doc_id = query['_id']
+            if doc_id in self.data:
+                if '$push' in update:
+                    for field, value in update['$push'].items():
+                        if field not in self.data[doc_id]:
+                            self.data[doc_id][field] = []
+                        self.data[doc_id][field].append(value)
+                if '$pull' in update:
+                    for field, value in update['$pull'].items():
+                        if field in self.data[doc_id] and value in self.data[doc_id][field]:
+                            self.data[doc_id][field].remove(value)
+                return type('MockResult', (), {'modified_count': 1})()
+        return type('MockResult', (), {'modified_count': 0})()
+    
+    def count_documents(self, query):
+        """Count documents"""
+        return len(self.data)
+    
+    def aggregate(self, pipeline):
+        """Simple aggregation for getting unique days"""
+        # For the specific case of getting unique days
+        days = set()
+        for doc in self.data.values():
+            if 'schedule_details' in doc and 'days' in doc['schedule_details']:
+                days.update(doc['schedule_details']['days'])
+        
+        return [{'_id': day} for day in sorted(days)]
+    
+    def insert_one(self, doc):
+        """Insert one document"""
+        doc_id = doc.pop('_id')
+        self.data[doc_id] = doc
+
+# Initialize collections
+activities_collection = SimpleCollection(activities_data)
+teachers_collection = SimpleCollection(teachers_data)
+
 def hash_password(password):
-    """Hash password using Argon2"""
-    try:
-        from argon2 import PasswordHasher
-        ph = PasswordHasher()
-        return ph.hash(password)
-    except ImportError:
-        # Fallback for development
-        return f"hashed_{password}"
+    """Simple password hashing for development"""
+    return f"hashed_{password}"
 
 def init_database():
     """Initialize database if empty"""
-
+    
     # Initialize activities if empty
-    if activities_collection.count_documents({}) == 0:
+    if not activities_data:
         for name, details in initial_activities.items():
-            activities_collection.insert_one({"_id": name, **details})
+            activities_data[name] = details
             
-    # Initialize teacher accounts if empty
-    if teachers_collection.count_documents({}) == 0:
+    # Initialize teacher accounts if empty  
+    if not teachers_data:
         for teacher in initial_teachers:
-            teachers_collection.insert_one({"_id": teacher["username"], **teacher})
+            username = teacher.pop('username')
+            teachers_data[username] = teacher
 
 # Initial database if empty
 initial_activities = {
@@ -209,4 +287,3 @@ initial_teachers = [
         "role": "admin"
     }
 ]
-
