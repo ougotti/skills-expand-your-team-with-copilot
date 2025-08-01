@@ -1,0 +1,233 @@
+name: 🎨 UI/UX Improvement
+description: Request improvements to the user interface or user experience
+title: "[UI/UX] "
+labels: ["enhancement", "ui-ux", "teacher-request", "user-experience"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🖥️ UI/UX Improvement Request for Mergington High School Activities System
+        
+        Help us make the activities website easier and more pleasant to use! Your feedback about the user experience is valuable for improving the system.
+        
+        > **Note for Coding Team**: UI/UX improvements should enhance usability while maintaining consistency with existing design patterns.
+
+  - type: dropdown
+    id: improvement-area
+    attributes:
+      label: What Part of the Interface Needs Improvement?
+      description: Which area of the website could be better?
+      options:
+        - "Main activities page layout"
+        - "Activity signup process"
+        - "Search and filtering"
+        - "Mobile phone experience"
+        - "Navigation between pages"
+        - "Login/logout process"
+        - "Activity information display"
+        - "Error messages and feedback"
+        - "Overall visual design"
+        - "Loading and performance"
+        - "Other interface element"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-problem
+    attributes:
+      label: What's Currently Difficult or Confusing?
+      description: Describe the current user experience problem
+      placeholder: |
+        e.g., "Students can't easily find activities they're interested in"
+        "The signup button is hard to see"
+        "Too much scrolling required on mobile phones"
+        "Error messages are confusing"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: affected-users
+    attributes:
+      label: Who Has This Problem?
+      description: Which users are affected by this UI/UX issue?
+      multiple: true
+      options:
+        - "Students"
+        - "Teachers"
+        - "Parents (if they access the system)"
+        - "School staff"
+        - "Everyone who uses the system"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device-context
+    attributes:
+      label: On Which Devices Is This a Problem?
+      description: Where do users experience this issue?
+      multiple: true
+      options:
+        - "Desktop computers"
+        - "Laptop computers"
+        - "Tablets (iPad/Android)"
+        - "Mobile phones"
+        - "All devices"
+    validations:
+      required: true
+
+  - type: textarea
+    id: improvement-suggestion
+    attributes:
+      label: How Could This Be Improved?
+      description: Describe your ideas for making this better
+      placeholder: |
+        e.g., "Make the search box more prominent at the top"
+        "Use bigger buttons for mobile users"
+        "Group activities by category with clear sections"
+        "Show clearer success messages when students sign up"
+    validations:
+      required: true
+
+  - type: textarea
+    id: user-story
+    attributes:
+      label: User Story
+      description: Describe how the improved experience should work from a user's perspective
+      placeholder: |
+        "As a student, I want to quickly find activities I'm interested in, so I can sign up easily"
+        "As a teacher, I want to clearly see signup status, so I know how many students are enrolled"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: improvement-priority
+    attributes:
+      label: How Much Would This Improvement Help?
+      description: What's the impact of making this change?
+      options:
+        - "Huge improvement - would make system much easier to use"
+        - "Significant improvement - would solve a real usability problem"
+        - "Moderate improvement - would be nice to have"
+        - "Minor improvement - small enhancement"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: usability-goals
+    attributes:
+      label: Usability Goals (Check all that apply)
+      description: What should this improvement achieve?
+      options:
+        - label: "Make it faster to complete tasks"
+        - label: "Make it easier for new users to understand"
+        - label: "Reduce the number of clicks required"
+        - label: "Make it work better on mobile devices"
+        - label: "Make important features more visible"
+        - label: "Reduce user errors and confusion"
+        - label: "Make it more accessible for users with disabilities"
+        - label: "Improve visual appeal and modern look"
+
+  - type: textarea
+    id: examples-inspiration
+    attributes:
+      label: Examples or Inspiration
+      description: Are there other websites or apps that do this well?
+      placeholder: |
+        e.g., "Google Calendar has a nice clean layout"
+        "The school's main website has better mobile navigation"
+        "Canvas does a good job with clear buttons"
+
+  - type: textarea
+    id: current-workarounds
+    attributes:
+      label: How Do Users Work Around This Now?
+      description: What do people do to deal with the current interface problems?
+      placeholder: |
+        e.g., "Students ask teachers which activities are available"
+        "People use desktop instead of mobile"
+        "Users have to scroll back to top to find search"
+
+  - type: textarea
+    id: success-measurement
+    attributes:
+      label: How Will We Know This Improvement Worked?
+      description: What would indicate that the UI/UX is better?
+      placeholder: |
+        e.g., "Students can find and sign up for activities in under 2 minutes"
+        "Fewer questions from users about how to use the system"
+        "Mobile usage increases"
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will you know this improvement is complete?
+      value: |
+        - [ ] Interface change is implemented as described
+        - [ ] Improvement works on all specified devices
+        - [ ] Change maintains existing functionality
+        - [ ] User experience is noticeably better
+        - [ ] Change is consistent with rest of system design
+        - [ ] No new usability problems are introduced
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other details about this improvement?
+      placeholder: Related improvements needed, constraints to consider, etc.
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### 🤖 Information for Coding Team
+        
+        **UI/UX Implementation Guidelines:**
+        - Follow existing design patterns and consistency
+        - Ensure changes work across all specified devices
+        - Test with actual users (teachers/students) if possible
+        - Consider accessibility standards (WCAG 2.1)
+        - Maintain responsive design principles
+        - Keep load times and performance in mind
+        
+        **Design Principles for School System:**
+        - Simple and intuitive for non-technical users
+        - Clear visual hierarchy and information organization
+        - Consistent interaction patterns throughout system
+        - Mobile-first responsive design
+        - Accessible for users with varying abilities
+        - Professional appearance appropriate for educational setting
+        
+        **Related Files to Update:**
+        - `src/static/styles.css` - Visual styling and layout
+        - `src/static/index.html` - HTML structure changes
+        - `src/static/app.js` - Interactive behavior updates
+        - May need backend changes if UI affects data flow
+        
+        **Testing Requirements:**
+        - Test on multiple screen sizes and devices
+        - Verify accessibility with screen readers
+        - Test with different browsers
+        - Validate that improvements don't break existing functionality
+        - Consider usability testing with real teachers/students
+        
+        **Performance Considerations:**
+        - Ensure CSS changes don't impact load times
+        - Optimize any new images or assets
+        - Test on slower connections (mobile data)
+        - Verify smooth animations and transitions
+        
+        **Documentation Updates:**
+        - Update screenshots in user documentation
+        - Note any workflow changes for teachers
+        - Update development guide if new CSS frameworks added
+        
+        **Browser Compatibility:**
+        - Test on Chrome, Firefox, Safari, Edge
+        - Verify mobile browser compatibility
+        - Check for consistent appearance across browsers
+        - Test on older browsers used in school systems

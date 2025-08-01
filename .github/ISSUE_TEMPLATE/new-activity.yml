@@ -1,0 +1,191 @@
+name: 🎯 New Activity Request
+description: Request to add a new extracurricular activity to the system
+title: "[NEW ACTIVITY] "
+labels: ["enhancement", "new-activity", "teacher-request"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🏫 New Activity Request for Mergington High School
+        
+        Thank you for wanting to add a new extracurricular activity! Please fill out all the information below so our coding team can add this activity to the system quickly and accurately.
+        
+        > **Note for Coding Team**: This template provides all necessary information for implementing a new activity. Please validate all data and ensure proper integration with the existing activities system.
+
+  - type: input
+    id: activity-name
+    attributes:
+      label: Activity Name
+      description: What is the name of the new activity?
+      placeholder: e.g., "Drama Club", "Robotics Team", "Chess Club"
+    validations:
+      required: true
+
+  - type: textarea
+    id: activity-description
+    attributes:
+      label: Activity Description
+      description: Provide a detailed description of what this activity involves
+      placeholder: Describe what students will do in this activity, its purpose, and any special requirements
+    validations:
+      required: true
+
+  - type: dropdown
+    id: activity-category
+    attributes:
+      label: Activity Category
+      description: Which category best fits this activity?
+      options:
+        - Academic
+        - Arts & Performance
+        - Sports & Fitness
+        - Community Service
+        - Technology
+        - Leadership
+        - Social & Cultural
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: teacher-supervisor
+    attributes:
+      label: Teacher Supervisor
+      description: Which teacher will supervise this activity?
+      placeholder: First Name Last Name
+    validations:
+      required: true
+
+  - type: input
+    id: supervisor-email
+    attributes:
+      label: Supervisor Email
+      description: Email address for the supervising teacher
+      placeholder: teacher@mergington.edu
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: meeting-days
+    attributes:
+      label: Meeting Days
+      description: Which days of the week will this activity meet?
+      options:
+        - label: Monday
+        - label: Tuesday  
+        - label: Wednesday
+        - label: Thursday
+        - label: Friday
+    validations:
+      required: true
+
+  - type: input
+    id: start-time
+    attributes:
+      label: Start Time
+      description: What time does the activity start?
+      placeholder: e.g., "3:30 PM" or "15:30"
+    validations:
+      required: true
+
+  - type: input
+    id: end-time
+    attributes:
+      label: End Time
+      description: What time does the activity end?
+      placeholder: e.g., "5:00 PM" or "17:00"
+    validations:
+      required: true
+
+  - type: input
+    id: room-location
+    attributes:
+      label: Room/Location
+      description: Where will this activity take place?
+      placeholder: e.g., "Room 205", "Gymnasium", "Computer Lab"
+    validations:
+      required: true
+
+  - type: input
+    id: max-participants
+    attributes:
+      label: Maximum Participants
+      description: What's the maximum number of students that can participate?
+      placeholder: e.g., "25"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: grade-levels
+    attributes:
+      label: Grade Levels
+      description: Which grade levels can participate?
+      multiple: true
+      options:
+        - "9th Grade"
+        - "10th Grade"
+        - "11th Grade"  
+        - "12th Grade"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: trimester
+    attributes:
+      label: Available Trimesters
+      description: During which trimesters will this activity be offered?
+      multiple: true
+      options:
+        - "Trimester 1 (August-December)"
+        - "Trimester 2 (January-March)"
+        - "Trimester 3 (April-May)"
+        - "Summer Cycle (June-July)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: special-requirements
+    attributes:
+      label: Special Requirements or Notes
+      description: Any special equipment, permissions, or other requirements?
+      placeholder: e.g., "Requires computer access", "Permission slips needed", "Equipment fees apply"
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will you know this request is complete?
+      value: |
+        - [ ] Activity appears in the activities list on the website
+        - [ ] Students can sign up for the activity
+        - [ ] All activity details (time, location, supervisor) are correct
+        - [ ] Activity is properly categorized
+        - [ ] Maximum participant limit is enforced
+        - [ ] Only eligible grade levels can sign up
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### 🤖 Information for Coding Team
+        
+        **Implementation Hints:**
+        - Add new activity entry to the database with all provided details
+        - Ensure proper data validation for times, participant limits, and grade levels
+        - Update the frontend categories filter if new category is introduced
+        - Test signup functionality with the new activity
+        - Verify email notifications work for the supervisor
+        
+        **Related Files to Update:**
+        - `src/backend/database.py` - Add new activity to initial data
+        - `src/backend/routers/activities.py` - Ensure new activity works with existing endpoints
+        - `src/static/app.js` - May need category filter updates
+        
+        **Testing Requirements:**
+        - Verify activity appears in GET /activities endpoint
+        - Test signup functionality with POST /activities/{activity_name}/signup
+        - Confirm filtering works correctly
+        - Validate grade level and participant limit restrictions

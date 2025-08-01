@@ -1,0 +1,209 @@
+name: 🐛 Bug Report
+description: Report something that is broken or not working correctly
+title: "[BUG] "
+labels: ["bug", "teacher-request"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🔧 Bug Report for Mergington High School Activities System
+        
+        Something's not working right? Let us know! The more details you provide, the faster we can fix it.
+        
+        > **Note for Coding Team**: Bug reports require investigation and testing. Reproduce the issue before implementing fixes.
+
+  - type: dropdown
+    id: bug-area
+    attributes:
+      label: What Part of the System Has the Bug?
+      description: Where did you notice the problem?
+      options:
+        - "Website won't load"
+        - "Activities list not showing"
+        - "Sign up button not working"
+        - "Search/filter not working"
+        - "Wrong activity information displayed"
+        - "Login/logout issues"
+        - "Mobile website problems"
+        - "Email notifications not working"
+        - "Page loading very slowly"
+        - "Other website problem"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What Happened?
+      description: Describe exactly what went wrong
+      placeholder: |
+        e.g., "When I clicked 'Sign Up' for Chess Club, nothing happened"
+        "The activities page shows 'Error 500' message"
+        "Student names are displaying incorrectly"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-expected
+    attributes:
+      label: What Should Have Happened Instead?
+      description: Describe what you expected to happen
+      placeholder: |
+        e.g., "Student should have been signed up for the activity"
+        "Page should show list of all activities"
+        "Names should display as 'First Last'"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: How to Reproduce the Bug
+      description: Step-by-step instructions for someone else to see the same problem
+      placeholder: |
+        1. Go to the activities website
+        2. Click on "View Activities"
+        3. Try to sign up for "Chess Club"
+        4. Enter email: student@mergington.edu
+        5. Click "Sign Up"
+        6. Bug happens here...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How Often Does This Happen?
+      description: Is this a consistent problem?
+      options:
+        - "Every time I try"
+        - "Most of the time"
+        - "Sometimes"
+        - "Only happened once"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device-type
+    attributes:
+      label: What Device Are You Using?
+      description: This helps us understand if it's a device-specific issue
+      options:
+        - "School computer (Windows)"
+        - "School computer (Mac)"
+        - "Personal laptop (Windows)"
+        - "Personal laptop (Mac)"
+        - "Phone (iPhone)"
+        - "Phone (Android)"
+        - "Tablet (iPad)"
+        - "Tablet (Android)"
+        - "Other"
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Which Web Browser?
+      description: Different browsers sometimes have different problems
+      options:
+        - "Chrome"
+        - "Firefox"
+        - "Safari"
+        - "Edge"
+        - "Internet Explorer"
+        - "Not sure"
+        - "Other"
+
+  - type: textarea
+    id: error-messages
+    attributes:
+      label: Error Messages
+      description: Copy any error messages you see exactly as they appear
+      placeholder: Paste exact error text here (including any numbers or codes)
+
+  - type: textarea
+    id: screenshots-description
+    attributes:
+      label: Screenshots or Screen Description
+      description: Describe what you see on screen, or note if you have screenshots to share separately
+      placeholder: |
+        e.g., "The page is completely blank"
+        "There's a red error box at the top"
+        "The Sign Up button is grayed out"
+        "I have a screenshot I can email to the tech team"
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: How Urgent Is This?
+      description: How much is this bug affecting your work?
+      options:
+        - "Critical - System completely unusable"
+        - "High - Major feature not working"
+        - "Medium - Workaround possible"
+        - "Low - Minor annoyance"
+    validations:
+      required: true
+
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Any Workarounds Found?
+      description: Have you found any way to get your work done despite this bug?
+      placeholder: e.g., "Using different browser works", "Refreshing page sometimes helps"
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will you know this bug is fixed?
+      value: |
+        - [ ] The reported problem no longer occurs
+        - [ ] System works as expected in the problem scenario
+        - [ ] No error messages appear
+        - [ ] Feature works consistently across different browsers/devices
+        - [ ] No new problems are introduced by the fix
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### 🤖 Information for Coding Team
+        
+        **Debugging Steps:**
+        1. Reproduce the bug using the provided steps
+        2. Check browser console for JavaScript errors
+        3. Review server logs for backend errors
+        4. Test on multiple browsers/devices if device-specific
+        5. Identify root cause before implementing fix
+        
+        **Common Bug Areas to Check:**
+        - Frontend JavaScript errors in browser console
+        - Backend API endpoint errors (500, 404, etc.)
+        - Database connection or query issues
+        - Browser compatibility problems
+        - Mobile responsiveness issues
+        - Form validation problems
+        
+        **Related Files to Investigate:**
+        - `src/static/app.js` - Frontend JavaScript
+        - `src/static/index.html` - HTML structure
+        - `src/static/styles.css` - CSS styling
+        - `src/backend/routers/` - API endpoints
+        - `src/backend/database.py` - Database operations
+        
+        **Testing Requirements:**
+        - Reproduce bug in reported environment
+        - Test fix across multiple browsers
+        - Verify fix doesn't break other functionality
+        - Test error handling and user feedback
+        - Confirm fix works on both desktop and mobile
+        
+        **Quality Assurance:**
+        - Document the root cause in commit message
+        - Add error handling if missing
+        - Consider adding automated test to prevent regression
+        - Update user documentation if needed
