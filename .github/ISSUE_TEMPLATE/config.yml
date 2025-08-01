@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Development Guide  
+    url: https://github.com/ougotti/skills-expand-your-team-with-copilot/blob/main/docs/how-to-develop.md
+    about: Learn how to set up and develop the application
+  - name: 🎓 School Information
+    url: https://github.com/ougotti/skills-expand-your-team-with-copilot/blob/main/.github/copilot-instructions.md
+    about: Information about Mergington High School policies and procedures

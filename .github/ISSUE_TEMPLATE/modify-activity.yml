@@ -1,0 +1,173 @@
+name: ✏️ Activity Modification
+description: Request changes to an existing extracurricular activity
+title: "[MODIFY ACTIVITY] "
+labels: ["enhancement", "modify-activity", "teacher-request"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📝 Activity Modification Request for Mergington High School
+        
+        Use this form to request changes to an existing extracurricular activity. Please be specific about what needs to be changed and why.
+        
+        > **Note for Coding Team**: This template provides information for modifying existing activities. Validate changes don't conflict with student signups or other constraints.
+
+  - type: dropdown
+    id: existing-activity
+    attributes:
+      label: Which Activity Needs Changes?
+      description: Select the activity you want to modify (if not in list, please specify in "Other Activity Name" below)
+      options:
+        - "Chess Club"
+        - "Drama Club" 
+        - "Basketball Team"
+        - "Science Olympiad"
+        - "Student Government"
+        - "Art Club"
+        - "Computer Programming Club"
+        - "Environmental Club"
+        - "Debate Team"
+        - "Yearbook Committee"
+        - "Other (specify below)"
+    validations:
+      required: true
+
+  - type: input
+    id: other-activity-name
+    attributes:
+      label: Other Activity Name
+      description: If you selected "Other" above, please specify the activity name
+      placeholder: Exact name as it appears in the system
+
+  - type: checkboxes
+    id: change-type
+    attributes:
+      label: What Type of Changes Are Needed?
+      description: Check all that apply
+      options:
+        - label: Change meeting days
+        - label: Change meeting times
+        - label: Change location/room
+        - label: Change supervisor/teacher
+        - label: Change activity description
+        - label: Change participant limit
+        - label: Change grade level eligibility
+        - label: Change trimester availability
+        - label: Other changes (specify below)
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-details
+    attributes:
+      label: Current Activity Details
+      description: What are the current details that need to be changed?
+      placeholder: |
+        e.g., "Currently meets Monday/Wednesday 3:30-5:00 PM in Room 205"
+        "Current supervisor: Ms. Johnson"
+        "Current participant limit: 20 students"
+    validations:
+      required: true
+
+  - type: textarea
+    id: requested-changes
+    attributes:
+      label: Requested Changes
+      description: Exactly what should be changed? Be specific!
+      placeholder: |
+        e.g., "Change to Tuesday/Thursday 4:00-5:30 PM in Room 301"
+        "Change supervisor to Mr. Smith (smith@mergington.edu)"
+        "Increase participant limit to 30 students"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason-for-change
+    attributes:
+      label: Reason for Changes
+      description: Why are these changes needed?
+      placeholder: e.g., "Room 205 is no longer available", "Teacher schedule conflict", "Higher student interest than expected"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency Level
+      description: How urgent are these changes?
+      options:
+        - "Low - Can wait until next trimester"
+        - "Medium - Needed within 2 weeks"
+        - "High - Needed this week"
+        - "Critical - Needed immediately"
+    validations:
+      required: true
+
+  - type: input
+    id: effective-date
+    attributes:
+      label: When Should Changes Take Effect?
+      description: Specific date or timeframe
+      placeholder: e.g., "January 15, 2024", "Beginning of Trimester 2", "Immediately"
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact-assessment
+    attributes:
+      label: Impact on Current Participants
+      description: How will these changes affect students already signed up?
+      placeholder: e.g., "All current students have been notified", "Need to check if new time works for existing participants"
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will you know this request is complete?
+      value: |
+        - [ ] Activity details are updated in the system
+        - [ ] Changes are visible on the activities website
+        - [ ] Current participants are notified (if applicable)
+        - [ ] New supervisor is updated (if applicable)
+        - [ ] Room/time conflicts are resolved
+        - [ ] All requested changes are accurately reflected
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: Additional Notes
+      description: Any other information the coding team should know?
+      placeholder: Special considerations, related changes needed, etc.
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### 🤖 Information for Coding Team
+        
+        **Implementation Hints:**
+        - Update activity entry in database with new details
+        - Validate that new schedule doesn't conflict with existing activities
+        - Check if room/location change affects other activities
+        - Ensure participant limits are respected if reduced
+        - Update supervisor information and email notifications
+        - Consider impact on existing signups
+        
+        **Related Files to Update:**
+        - `src/backend/database.py` - Modify existing activity data
+        - `src/backend/routers/activities.py` - May need validation updates
+        - Frontend may need refresh if changes affect filtering
+        
+        **Testing Requirements:**
+        - Verify all changes appear correctly in GET /activities
+        - Test that existing functionality still works
+        - Confirm updated details don't break signup process
+        - Validate any new constraints (time, room, participant limits)
+        
+        **Important Considerations:**
+        - Back up current activity data before changes
+        - Consider how changes affect students already signed up
+        - Ensure supervisor email updates are reflected in notifications

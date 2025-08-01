@@ -1,0 +1,196 @@
+name: 👥 Student Data Issue
+description: Report problems with student signups, enrollments, or data corrections
+title: "[STUDENT DATA] "
+labels: ["bug", "student-data", "teacher-request", "privacy"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🎓 Student Data Issue Report for Mergington High School
+        
+        Use this form to report issues with student data, signups, or enrollment problems. Student privacy is our top priority.
+        
+        > **⚠️ Privacy Notice**: Please do not include full names or sensitive information in this public issue. Use student ID numbers or contact the tech team directly for sensitive matters.
+        
+        > **Note for Coding Team**: Student data issues require careful handling. Verify all changes and ensure privacy compliance.
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Type of Student Data Issue
+      description: What kind of problem are you reporting?
+      options:
+        - "Student can't sign up for activity"
+        - "Student accidentally signed up multiple times"
+        - "Student needs to be removed from activity"
+        - "Wrong student information displayed"
+        - "Grade level restriction not working"
+        - "Participant limit not being enforced"
+        - "Student email not working"
+        - "Duplicate student entries"
+        - "Other data problem"
+    validations:
+      required: true
+
+  - type: input
+    id: affected-activity
+    attributes:
+      label: Which Activity is Affected?
+      description: Name of the activity with the data issue
+      placeholder: e.g., "Chess Club", "Basketball Team"
+    validations:
+      required: true
+
+  - type: input
+    id: student-identifier
+    attributes:
+      label: Student Identifier
+      description: "Student ID number or initials (DO NOT use full names for privacy)"
+      placeholder: "e.g., Student ID: 12345 or Initials: J.S."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: student-grade
+    attributes:
+      label: Student Grade Level
+      description: What grade is the affected student in?
+      options:
+        - "9th Grade"
+        - "10th Grade"
+        - "11th Grade"
+        - "12th Grade"
+        - "Unknown/Multiple Students"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-description
+    attributes:
+      label: Describe the Problem
+      description: What exactly is wrong? Be specific about what you expected vs. what actually happened
+      placeholder: |
+        e.g., "Student tried to sign up but got error message"
+        "Student appears signed up twice in the system"
+        "Student is in 10th grade but system allowed signup for 11th grade only activity"
+    validations:
+      required: true
+
+  - type: textarea
+    id: error-messages
+    attributes:
+      label: Error Messages (if any)
+      description: Copy any error messages exactly as they appeared
+      placeholder: Paste exact error text here
+
+  - type: dropdown
+    id: when-occurred
+    attributes:
+      label: When Did This Happen?
+      description: When was this problem first noticed?
+      options:
+        - "Today"
+        - "Yesterday" 
+        - "This week"
+        - "Last week"
+        - "Not sure - just discovered it"
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce the Problem
+      description: What steps can someone take to see this problem?
+      placeholder: |
+        1. Go to activities website
+        2. Click on [Activity Name]
+        3. Enter student email: [email]
+        4. Click "Sign Up"
+        5. Problem occurs here...
+
+  - type: checkboxes
+    id: privacy-sensitive
+    attributes:
+      label: Privacy and Sensitivity
+      description: Please confirm you understand privacy requirements
+      options:
+        - label: "I have NOT included any sensitive student information (full names, addresses, etc.) in this report"
+          required: true
+        - label: "I understand this is a public issue and have kept information general"
+          required: true
+
+  - type: dropdown
+    id: impact-level
+    attributes:
+      label: Impact Level
+      description: How many students or activities are affected?
+      options:
+        - "Single student, single activity"
+        - "Single student, multiple activities"
+        - "Multiple students, single activity"
+        - "Multiple students, multiple activities"
+        - "System-wide problem"
+    validations:
+      required: true
+
+  - type: textarea
+    id: temporary-workaround
+    attributes:
+      label: Temporary Workaround (if any)
+      description: Have you found any way to work around this problem temporarily?
+      placeholder: e.g., "Manually tracking signups on paper", "Using different email address"
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will you know this issue is resolved?
+      value: |
+        - [ ] Student can successfully sign up for the activity
+        - [ ] No duplicate entries exist
+        - [ ] Grade level restrictions work correctly
+        - [ ] Participant limits are properly enforced
+        - [ ] Student data is accurate and private
+        - [ ] No error messages appear during normal signup process
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### 🤖 Information for Coding Team
+        
+        **Implementation Hints:**
+        - Review database integrity for affected activity
+        - Check student signup validation logic
+        - Verify grade level restriction enforcement
+        - Examine participant limit checking
+        - Look for duplicate entry prevention
+        - Test email validation and formatting
+        
+        **Security & Privacy Considerations:**
+        - Handle all student data according to privacy policies
+        - Do not log sensitive information in debug output
+        - Ensure data changes are properly validated
+        - Consider FERPA compliance for student records
+        
+        **Related Files to Check:**
+        - `src/backend/routers/activities.py` - Signup endpoints
+        - `src/backend/database.py` - Data validation and storage
+        - `src/static/app.js` - Frontend validation
+        
+        **Testing Requirements:**
+        - Test signup process with various student data
+        - Verify grade level restrictions work correctly
+        - Confirm participant limits are enforced
+        - Check for duplicate prevention
+        - Validate error handling and user feedback
+        
+        **Data Integrity Checks:**
+        - Check for orphaned or duplicate student records
+        - Verify activity participant counts are accurate
+        - Ensure email addresses are properly formatted
+        - Confirm grade level data is consistent

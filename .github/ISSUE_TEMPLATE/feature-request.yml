@@ -1,0 +1,212 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement to improve the system
+title: "[FEATURE] "
+labels: ["enhancement", "feature-request", "teacher-request"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💡 Feature Request for Mergington High School Activities System
+        
+        Have an idea to make the activities system better? We'd love to hear it! The more details you provide, the better we can understand and implement your idea.
+        
+        > **Note for Coding Team**: Feature requests should align with educational goals and be technically feasible within the current system architecture.
+
+  - type: input
+    id: feature-name
+    attributes:
+      label: Feature Name
+      description: What would you call this new feature?
+      placeholder: e.g., "Activity Calendar View", "Parent Notifications", "Attendance Tracking"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem-solved
+    attributes:
+      label: What Problem Would This Solve?
+      description: Describe the current challenge or limitation that this feature would address
+      placeholder: |
+        e.g., "Teachers need to manually track attendance for activities"
+        "Parents want to know when their child signs up for activities"
+        "Students can't see activity schedules in calendar format"
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Describe the Proposed Feature
+      description: Explain in detail what this feature would do and how it would work
+      placeholder: |
+        e.g., "Add a calendar view that shows all activities by day/time"
+        "Send automatic email notifications to parents when students sign up"
+        "Allow teachers to mark attendance and track participation"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: user-type
+    attributes:
+      label: Who Would Use This Feature?
+      description: Which type of users would benefit most?
+      multiple: true
+      options:
+        - "Students"
+        - "Teachers"
+        - "Parents/Guardians"
+        - "School Administrators"
+        - "Activity Supervisors"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: feature-priority
+    attributes:
+      label: How Important Is This Feature?
+      description: Help us understand the priority level
+      options:
+        - "Nice to have - would be helpful"
+        - "Important - would solve a real problem"
+        - "Critical - current system is hard to use without this"
+        - "Essential - required for our school's needs"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-workaround
+    attributes:
+      label: How Do You Handle This Now?
+      description: What's your current process or workaround for this need?
+      placeholder: |
+        e.g., "We manually email parents about signups"
+        "Teachers use paper attendance sheets"
+        "Students have to remember activity times"
+
+  - type: textarea
+    id: success-scenario
+    attributes:
+      label: Describe Success
+      description: Paint a picture of how this feature would make things better
+      placeholder: |
+        e.g., "Teachers could easily see which students attended which activities"
+        "Parents would automatically know about their child's activities"
+        "Students could see all their activities in one calendar view"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: feature-requirements
+    attributes:
+      label: Feature Requirements (Check all that apply)
+      description: What capabilities should this feature have?
+      options:
+        - label: "Should work on mobile devices"
+        - label: "Should send email notifications"
+        - label: "Should integrate with existing login system"
+        - label: "Should allow data export (Excel, PDF, etc.)"
+        - label: "Should have permission controls (who can see what)"
+        - label: "Should work with existing activities data"
+        - label: "Should be simple for non-technical users"
+
+  - type: dropdown
+    id: implementation-timeline
+    attributes:
+      label: When Do You Need This?
+      description: What's your ideal timeline for having this feature?
+      options:
+        - "Before next trimester starts"
+        - "Before end of current school year"
+        - "Ready for next school year"
+        - "No specific deadline"
+    validations:
+      required: true
+
+  - type: textarea
+    id: similar-examples
+    attributes:
+      label: Examples from Other Systems
+      description: Have you seen similar features in other school systems or websites?
+      placeholder: |
+        e.g., "Like the calendar in Google Classroom"
+        "Similar to how Canvas shows assignments"
+        "Like the notifications in our school's main system"
+
+  - type: textarea
+    id: technical-considerations
+    attributes:
+      label: Technical Considerations
+      description: Any specific requirements or limitations we should know about?
+      placeholder: |
+        e.g., "Must work with school email system"
+        "Should not require additional login accounts"
+        "Must comply with student privacy rules"
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will you know this feature is complete and working correctly?
+      value: |
+        - [ ] Feature is accessible to intended users
+        - [ ] Feature works on both desktop and mobile
+        - [ ] Feature integrates properly with existing system
+        - [ ] Feature is easy to use without training
+        - [ ] Feature meets all specified requirements
+        - [ ] Feature has been tested with real user scenarios
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: Additional Notes
+      description: Anything else we should know about this feature request?
+      placeholder: Other related features, constraints, or ideas
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        ### 🤖 Information for Coding Team
+        
+        **Implementation Planning:**
+        - Assess technical feasibility within current architecture
+        - Identify required database schema changes
+        - Consider impact on existing functionality
+        - Plan for user interface changes
+        - Evaluate third-party integrations needed
+        
+        **Design Considerations:**
+        - Keep consistent with existing UI/UX patterns
+        - Ensure accessibility compliance
+        - Design for mobile-first responsiveness
+        - Consider performance impact
+        - Plan for scalability with school size
+        
+        **Related Files Likely to Change:**
+        - `src/backend/database.py` - May need new data models
+        - `src/backend/routers/` - May need new API endpoints
+        - `src/static/index.html` - UI structure changes
+        - `src/static/app.js` - Frontend functionality
+        - `src/static/styles.css` - Styling for new features
+        
+        **Testing Strategy:**
+        - Create test scenarios for each user type
+        - Test integration with existing workflows
+        - Validate privacy and security requirements
+        - Test across different devices and browsers
+        - Plan for user acceptance testing with teachers
+        
+        **Documentation Updates:**
+        - Update user documentation for new feature
+        - Add API documentation if new endpoints
+        - Update development guide if architecture changes
+        - Create user training materials if needed
+        
+        **Security & Privacy:**
+        - Ensure FERPA compliance for student data
+        - Validate permission controls work correctly
+        - Test email notifications for appropriate content
+        - Verify data access restrictions
