@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoryFilters = document.querySelectorAll(".category-filter");
   const dayFilters = document.querySelectorAll(".day-filter");
   const timeFilters = document.querySelectorAll(".time-filter");
+  const modeButtons = document.querySelectorAll(".mode-button");
 
   // Authentication elements
   const loginButton = document.getElementById("login-button");
@@ -40,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let searchQuery = "";
   let currentDay = "";
   let currentTimeRange = "";
+  let displayMode = "filter"; // "filter" or "group"
 
   // Authentication state
   let currentUser = null;
@@ -66,6 +68,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Function to set display mode
+  function setDisplayMode(mode) {
+    displayMode = mode;
+
+    // Update active class
+    modeButtons.forEach((btn) => {
+      if (btn.dataset.mode === mode) {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
+      }
+    });
+
+    // Update the activities list layout class
+    const activitiesList = document.getElementById("activities-list");
+    if (mode === "group") {
+      activitiesList.classList.add("grouped-layout");
+    } else {
+      activitiesList.classList.remove("grouped-layout");
+    }
+
+    displayFilteredActivities();
+  }
+
   // Function to set day filter
   function setDayFilter(day) {
     currentDay = day;
@@ -79,7 +105,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    fetchActivities();
+    if (displayMode === "filter") {
+      fetchActivities();
+    } else {
+      // In group mode, just redisplay without fetching
+      displayFilteredActivities();
+    }
   }
 
   // Function to set time range filter
@@ -95,7 +126,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    fetchActivities();
+    if (displayMode === "filter") {
+      fetchActivities();
+    } else {
+      // In group mode, just redisplay without fetching
+      displayFilteredActivities();
+    }
   }
 
   // Check if user is already logged in (from localStorage)
@@ -414,6 +450,15 @@ document.addEventListener("DOMContentLoaded", () => {
     // Clear the activities list
     activitiesList.innerHTML = "";
 
+    if (displayMode === "filter") {
+      displayFilteredActivitiesNormal();
+    } else {
+      displayGroupedActivities();
+    }
+  }
+
+  // Function to display activities in normal filter mode
+  function displayFilteredActivitiesNormal() {
     // Apply client-side filtering - this handles category filter and search, plus weekend filter
     let filteredActivities = {};
 
@@ -472,8 +517,185 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Function to display activities in grouped mode
+  function displayGroupedActivities() {
+    // Apply search filter to all activities first
+    let searchFilteredActivities = {};
+
+    Object.entries(allActivities).forEach(([name, details]) => {
+      // Apply search filter
+      const searchableContent = [
+        name.toLowerCase(),
+        details.description.toLowerCase(),
+        formatSchedule(details).toLowerCase(),
+      ].join(" ");
+
+      if (
+        searchQuery &&
+        !searchableContent.includes(searchQuery.toLowerCase())
+      ) {
+        return;
+      }
+
+      searchFilteredActivities[name] = details;
+    });
+
+    // Group activities based on active filters
+    let groups = {};
+
+    // Determine grouping criteria
+    let groupingCriteria = [];
+    if (currentDay && currentDay !== "") {
+      groupingCriteria.push("day");
+    }
+    if (currentTimeRange && currentTimeRange !== "") {
+      groupingCriteria.push("time");
+    }
+    if (currentFilter && currentFilter !== "all") {
+      groupingCriteria.push("category");
+    }
+
+    // If no specific filters are active, group by category by default
+    if (groupingCriteria.length === 0) {
+      groupingCriteria = ["category"];
+    }
+
+    // Group activities
+    Object.entries(searchFilteredActivities).forEach(([name, details]) => {
+      const activityType = getActivityType(name, details.description);
+      let groupKeys = [];
+
+      // Create group keys based on criteria
+      if (groupingCriteria.includes("day")) {
+        if (currentDay) {
+          // Group by matching day vs other days
+          const activityDays = details.schedule_details ? details.schedule_details.days : [];
+          if (activityDays.includes(currentDay)) {
+            groupKeys.push(`${currentDay} Activities`);
+          } else {
+            groupKeys.push("Other Days");
+          }
+        }
+      }
+
+      if (groupingCriteria.includes("time")) {
+        if (currentTimeRange) {
+          const range = timeRanges[currentTimeRange];
+          let matchesTimeRange = false;
+
+          if (currentTimeRange === "weekend" && details.schedule_details) {
+            const activityDays = details.schedule_details.days;
+            matchesTimeRange = activityDays.some((day) =>
+              range.days.includes(day)
+            );
+          } else if (range && details.schedule_details) {
+            const activityStart = details.schedule_details.start_time;
+            const activityEnd = details.schedule_details.end_time;
+            matchesTimeRange = activityStart >= range.start && activityEnd <= range.end;
+          }
+
+          if (matchesTimeRange) {
+            const timeLabels = {
+              morning: "Before School",
+              afternoon: "After School", 
+              weekend: "Weekend"
+            };
+            groupKeys.push(`${timeLabels[currentTimeRange]} Activities`);
+          } else {
+            groupKeys.push("Other Times");
+          }
+        }
+      }
+
+      if (groupingCriteria.includes("category")) {
+        if (currentFilter !== "all") {
+          // Group by matching category vs other categories
+          if (activityType === currentFilter) {
+            const typeLabels = {
+              sports: "Sports",
+              arts: "Arts",
+              academic: "Academic",
+              community: "Community",
+              technology: "Technology"
+            };
+            groupKeys.push(`${typeLabels[currentFilter]} Activities`);
+          } else {
+            groupKeys.push("Other Categories");
+          }
+        } else {
+          // Group by activity type
+          const typeLabels = {
+            sports: "Sports",
+            arts: "Arts", 
+            academic: "Academic",
+            community: "Community",
+            technology: "Technology"
+          };
+          groupKeys.push(typeLabels[activityType] || "Other");
+        }
+      }
+
+      // Create a combined group key
+      const groupKey = groupKeys.length > 0 ? groupKeys.join(" - ") : "All Activities";
+
+      if (!groups[groupKey]) {
+        groups[groupKey] = [];
+      }
+      groups[groupKey].push({ name, details });
+    });
+
+    // Check if there are any results
+    const totalActivities = Object.values(groups).reduce((sum, group) => sum + group.length, 0);
+    if (totalActivities === 0) {
+      activitiesList.innerHTML = `
+        <div class="no-results">
+          <h4>No activities found</h4>
+          <p>Try adjusting your search or filter criteria</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Display grouped activities
+    Object.entries(groups).forEach(([groupName, activities]) => {
+      if (activities.length === 0) return;
+
+      // Create group container
+      const groupDiv = document.createElement("div");
+      groupDiv.className = "activity-group";
+
+      // Create group header
+      const groupHeader = document.createElement("div");
+      groupHeader.className = "group-header";
+      groupHeader.innerHTML = `
+        ${groupName}
+        <span class="group-count">(${activities.length} ${activities.length === 1 ? 'activity' : 'activities'})</span>
+      `;
+
+      // Create group activities container
+      const groupActivities = document.createElement("div");
+      groupActivities.className = "group-activities";
+
+      // Add activities to group
+      activities.forEach(({ name, details }) => {
+        const activityCard = createActivityCardElement(name, details);
+        groupActivities.appendChild(activityCard);
+      });
+
+      groupDiv.appendChild(groupHeader);
+      groupDiv.appendChild(groupActivities);
+      activitiesList.appendChild(groupDiv);
+    });
+  }
+
   // Function to render a single activity card
   function renderActivityCard(name, details) {
+    const activityCard = createActivityCardElement(name, details);
+    activitiesList.appendChild(activityCard);
+  }
+
+  // Function to create activity card element (used by both normal and grouped display)
+  function createActivityCardElement(name, details) {
     const activityCard = document.createElement("div");
     activityCard.className = "activity-card";
 
@@ -587,7 +809,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    activitiesList.appendChild(activityCard);
+    return activityCard;
   }
 
   // Event listeners for search and filter
@@ -618,26 +840,21 @@ document.addEventListener("DOMContentLoaded", () => {
   // Add event listeners to day filter buttons
   dayFilters.forEach((button) => {
     button.addEventListener("click", () => {
-      // Update active class
-      dayFilters.forEach((btn) => btn.classList.remove("active"));
-      button.classList.add("active");
-
-      // Update current day filter and fetch activities
-      currentDay = button.dataset.day;
-      fetchActivities();
+      setDayFilter(button.dataset.day);
     });
   });
 
   // Add event listeners for time filter buttons
   timeFilters.forEach((button) => {
     button.addEventListener("click", () => {
-      // Update active class
-      timeFilters.forEach((btn) => btn.classList.remove("active"));
-      button.classList.add("active");
+      setTimeRangeFilter(button.dataset.time);
+    });
+  });
 
-      // Update current time filter and fetch activities
-      currentTimeRange = button.dataset.time;
-      fetchActivities();
+  // Add event listeners for mode buttons
+  modeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      setDisplayMode(button.dataset.mode);
     });
   });
 
